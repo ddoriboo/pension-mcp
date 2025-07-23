@@ -1,1 +1,1 @@
-web: cd fss_pension_web && uvicorn simple_app:app --host 0.0.0.0 --port $PORT
+web: python fss_pension_web/simple_app.py

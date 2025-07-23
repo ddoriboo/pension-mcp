@@ -4,8 +4,13 @@
 """
 
 import os
+import sys
 import uuid
+from pathlib import Path
 from fastapi import FastAPI, HTTPException, Request
+
+# 현재 디렉토리를 Python path에 추가
+sys.path.insert(0, str(Path(__file__).parent))
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 from fastapi.responses import HTMLResponse
@@ -26,9 +31,11 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# 정적 파일 및 템플릿
-app.mount("/static", StaticFiles(directory="static"), name="static")
-templates = Jinja2Templates(directory="templates")
+# 정적 파일 및 템플릿 (절대 경로로 설정)
+import pathlib
+BASE_DIR = pathlib.Path(__file__).parent
+app.mount("/static", StaticFiles(directory=str(BASE_DIR / "static")), name="static")
+templates = Jinja2Templates(directory=str(BASE_DIR / "templates"))
 
 # API 키 설정
 FSS_SERVICE_KEY = os.getenv("FSS_SERVICE_KEY")  
