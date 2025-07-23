@@ -1,0 +1,8 @@
+[phases.setup]
+nixPkgs = ["python311", "gcc"]
+
+[phases.install]
+cmds = ["cd fss_pension_web && pip install -r requirements.txt"]
+
+[start]
+cmd = "cd fss_pension_web && python simple_app.py"
