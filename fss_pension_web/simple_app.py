@@ -41,15 +41,25 @@ templates = Jinja2Templates(directory=str(BASE_DIR / "templates"))
 FSS_SERVICE_KEY = os.getenv("FSS_SERVICE_KEY")  
 OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
 
-# Check required environment variables
-if not FSS_SERVICE_KEY:
-    raise ValueError("FSS_SERVICE_KEY environment variable is required")
-if not OPENAI_API_KEY:
-    raise ValueError("OPENAI_API_KEY environment variable is required")
+# 클라이언트는 lazy initialization으로 변경
+fss_client = None
+ai_consultant = None
 
-# 클라이언트 초기화
-fss_client = FSSPensionClient(FSS_SERVICE_KEY)
-ai_consultant = PensionAIConsultant(OPENAI_API_KEY, FSS_SERVICE_KEY)
+def get_fss_client():
+    global fss_client
+    if fss_client is None:
+        if not FSS_SERVICE_KEY:
+            raise HTTPException(status_code=500, detail="FSS_SERVICE_KEY environment variable is required")
+        fss_client = FSSPensionClient(FSS_SERVICE_KEY)
+    return fss_client
+
+def get_ai_consultant():
+    global ai_consultant
+    if ai_consultant is None:
+        if not FSS_SERVICE_KEY or not OPENAI_API_KEY:
+            raise HTTPException(status_code=500, detail="FSS_SERVICE_KEY and OPENAI_API_KEY environment variables are required")
+        ai_consultant = PensionAIConsultant(OPENAI_API_KEY, FSS_SERVICE_KEY)
+    return ai_consultant
 
 # Pydantic 모델 정의
 class ChatMessage(BaseModel):
@@ -91,7 +101,8 @@ async def health():
 @app.get("/api/market-summary")
 async def market_summary():
     try:
-        summary = await fss_client.get_market_summary()
+        client = get_fss_client()
+        summary = await client.get_market_summary()
         return {"success": True, "data": summary}
     except Exception as e:
         return {"success": False, "error": str(e)}
@@ -99,7 +110,8 @@ async def market_summary():
 @app.get("/api/low-fee-products")
 async def low_fee_products(limit: int = 10):
     try:
-        products = await fss_client.analyze_low_fee_products(limit=limit)
+        client = get_fss_client()
+        products = await client.analyze_low_fee_products(limit=limit)
         return {"success": True, "data": products, "total": len(products)}
     except Exception as e:
         return {"success": False, "error": str(e)}
@@ -107,7 +119,8 @@ async def low_fee_products(limit: int = 10):
 @app.get("/api/company-ranking")
 async def company_ranking():
     try:
-        companies = await fss_client.analyze_company_ranking()
+        client = get_fss_client()
+        companies = await client.analyze_company_ranking()
         return {"success": True, "data": companies, "total": len(companies)}
     except Exception as e:
         return {"success": False, "error": str(e)}
@@ -115,7 +128,8 @@ async def company_ranking():
 @app.get("/api/pension-statistics")
 async def pension_statistics():
     try:
-        stats = await fss_client.get_pension_statistics()
+        client = get_fss_client()
+        stats = await client.get_pension_statistics()
         return {"success": True, "data": stats}
     except Exception as e:
         return {"success": False, "error": str(e)}
@@ -127,7 +141,8 @@ async def ai_chat(chat_request: ChatMessage):
     """기본 AI 채팅 (프로필 없이)"""
     try:
         user_id = chat_request.user_id or str(uuid.uuid4())
-        result = await ai_consultant.chat(user_id, chat_request.message)
+        consultant = get_ai_consultant()
+        result = await consultant.chat(user_id, chat_request.message)
         return result
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
@@ -138,7 +153,8 @@ async def ai_chat_with_profile(chat_request: ChatWithProfile):
     try:
         user_id = chat_request.user_id or str(uuid.uuid4())
         user_profile = chat_request.user_profile.dict() if chat_request.user_profile else None
-        result = await ai_consultant.chat(user_id, chat_request.message, user_profile)
+        consultant = get_ai_consultant()
+        result = await consultant.chat(user_id, chat_request.message, user_profile)
         return result
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
@@ -148,7 +164,8 @@ async def ai_recommendation(rec_request: RecommendationRequest):
     """개인 맞춤형 연금 추천"""
     try:
         user_profile = rec_request.user_profile.dict()
-        result = await ai_consultant.generate_personalized_recommendation(user_profile)
+        consultant = get_ai_consultant()
+        result = await consultant.generate_personalized_recommendation(user_profile)
         return result
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
@@ -159,7 +176,8 @@ async def retirement_scenario_analysis(scenario_request: ScenarioAnalysisRequest
     try:
         user_profile = scenario_request.user_profile.dict()
         scenario = scenario_request.scenario.dict()
-        result = await ai_consultant.analyze_retirement_scenario(user_profile, scenario)
+        consultant = get_ai_consultant()
+        result = await consultant.analyze_retirement_scenario(user_profile, scenario)
         return result
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
@@ -168,7 +186,8 @@ async def retirement_scenario_analysis(scenario_request: ScenarioAnalysisRequest
 async def clear_chat_history(user_id: str):
     """채팅 히스토리 삭제"""
     try:
-        ai_consultant.clear_conversation_history(user_id)
+        consultant = get_ai_consultant()
+        consultant.clear_conversation_history(user_id)
         return {"success": True, "message": "채팅 히스토리가 삭제되었습니다."}
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
@@ -180,7 +199,11 @@ async def ai_status():
         "ai_service": "active",
         "openai_configured": bool(OPENAI_API_KEY and len(OPENAI_API_KEY) > 10),
         "fss_configured": bool(FSS_SERVICE_KEY),
-        "timestamp": "2025-07-22"
+        "environment_variables": {
+            "FSS_SERVICE_KEY": "Set" if FSS_SERVICE_KEY else "Missing",
+            "OPENAI_API_KEY": "Set" if OPENAI_API_KEY else "Missing"
+        },
+        "timestamp": "2025-07-23"
     }
 
 if __name__ == "__main__":
