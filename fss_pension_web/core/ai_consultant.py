@@ -102,8 +102,16 @@ class PensionAIConsultant:
             if user_id not in self.conversation_history:
                 self.conversation_history[user_id] = []
             
-            # 시장 컨텍스트 가져오기
-            market_context = await self.get_market_context()
+            # 시장 컨텍스트 가져오기 (FSS API 호출 실패 시 기본값 사용)
+            try:
+                market_context = await self.get_market_context()
+            except Exception as market_error:
+                logger.warning(f"FSS 시장 데이터 로드 실패: {market_error}")
+                market_context = """
+                ## 현재 연금 시장 현황
+                시장 데이터를 불러오는 중 오류가 발생했습니다. 
+                일반적인 연금 상담을 진행하겠습니다.
+                """
             
             # 사용자 프로필 컨텍스트
             profile_context = ""
@@ -168,10 +176,14 @@ class PensionAIConsultant:
             }
             
         except Exception as e:
-            logger.error(f"AI 상담 실패 (user_id: {user_id}): {e}")
+            import traceback
+            error_details = traceback.format_exc()
+            logger.error(f"AI 상담 실패 (user_id: {user_id}): {error_details}")
+            print(f"AI Consultant Error: {error_details}")  # Railway 로그에 출력
             return {
                 "success": False,
                 "error": str(e),
+                "error_type": type(e).__name__,
                 "timestamp": datetime.now().isoformat()
             }
     

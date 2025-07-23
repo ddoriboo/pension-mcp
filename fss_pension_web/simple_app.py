@@ -153,11 +153,22 @@ async def ai_chat_with_profile(chat_request: ChatWithProfile):
     try:
         user_id = chat_request.user_id or str(uuid.uuid4())
         user_profile = chat_request.user_profile.dict() if chat_request.user_profile else None
+        
+        # 환경변수 확인
+        if not FSS_SERVICE_KEY:
+            return {"success": False, "error": "FSS_SERVICE_KEY environment variable is not configured"}
+        if not OPENAI_API_KEY:
+            return {"success": False, "error": "OPENAI_API_KEY environment variable is not configured"}
+        
         consultant = get_ai_consultant()
         result = await consultant.chat(user_id, chat_request.message, user_profile)
         return result
     except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
+        # 더 자세한 오류 로깅
+        import traceback
+        error_details = traceback.format_exc()
+        print(f"AI Chat Error: {error_details}")  # Railway 로그에 출력
+        return {"success": False, "error": f"Internal server error: {str(e)}"}
 
 @app.post("/api/ai-recommendation")
 async def ai_recommendation(rec_request: RecommendationRequest):
@@ -195,7 +206,7 @@ async def clear_chat_history(user_id: str):
 @app.get("/api/ai-status")
 async def ai_status():
     """AI 서비스 상태 확인"""
-    return {
+    status = {
         "ai_service": "active",
         "openai_configured": bool(OPENAI_API_KEY and len(OPENAI_API_KEY) > 10),
         "fss_configured": bool(FSS_SERVICE_KEY),
@@ -205,6 +216,25 @@ async def ai_status():
         },
         "timestamp": "2025-07-23"
     }
+    
+    # OpenAI API 연결 테스트
+    if OPENAI_API_KEY:
+        try:
+            from openai import AsyncOpenAI
+            client = AsyncOpenAI(api_key=OPENAI_API_KEY)
+            # 간단한 API 호출로 연결 테스트
+            test_response = await client.chat.completions.create(
+                model="gpt-4",
+                messages=[{"role": "user", "content": "test"}],
+                max_tokens=5
+            )
+            status["openai_test"] = "Success"
+        except Exception as e:
+            status["openai_test"] = f"Failed: {str(e)}"
+    else:
+        status["openai_test"] = "API Key not set"
+    
+    return status
 
 if __name__ == "__main__":
     import uvicorn
