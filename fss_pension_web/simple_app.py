@@ -37,9 +37,18 @@ BASE_DIR = pathlib.Path(__file__).parent
 app.mount("/static", StaticFiles(directory=str(BASE_DIR / "static")), name="static")
 templates = Jinja2Templates(directory=str(BASE_DIR / "templates"))
 
-# API 키 설정
-FSS_SERVICE_KEY = os.getenv("FSS_SERVICE_KEY")  
+# API 키 설정 (개행문자 및 공백 제거)
+FSS_SERVICE_KEY = os.getenv("FSS_SERVICE_KEY")
+if FSS_SERVICE_KEY:
+    FSS_SERVICE_KEY = FSS_SERVICE_KEY.strip().replace('\n', '').replace('\r', '').replace(' ', '')
+
 OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
+if OPENAI_API_KEY:
+    OPENAI_API_KEY = OPENAI_API_KEY.strip().replace('\n', '').replace('\r', '').replace(' ', '')
+    # API 키 형식 검증
+    if not OPENAI_API_KEY.startswith('sk-'):
+        print(f"Warning: OpenAI API key does not start with 'sk-': {OPENAI_API_KEY[:20]}...")
+        OPENAI_API_KEY = None
 
 # 클라이언트는 lazy initialization으로 변경
 fss_client = None
@@ -213,6 +222,12 @@ async def ai_status():
         "environment_variables": {
             "FSS_SERVICE_KEY": "Set" if FSS_SERVICE_KEY else "Missing",
             "OPENAI_API_KEY": "Set" if OPENAI_API_KEY else "Missing"
+        },
+        "api_key_details": {
+            "openai_key_length": len(OPENAI_API_KEY) if OPENAI_API_KEY else 0,
+            "openai_key_starts_with_sk": OPENAI_API_KEY.startswith('sk-') if OPENAI_API_KEY else False,
+            "openai_key_preview": OPENAI_API_KEY[:20] + "..." if OPENAI_API_KEY and len(OPENAI_API_KEY) > 20 else OPENAI_API_KEY,
+            "fss_key_length": len(FSS_SERVICE_KEY) if FSS_SERVICE_KEY else 0
         },
         "timestamp": "2025-07-23"
     }
