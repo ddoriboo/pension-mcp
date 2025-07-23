@@ -1,0 +1,466 @@
+/* 연금 대시보드 커스텀 스타일 */
+
+:root {
+    --primary-color: #0d6efd;
+    --success-color: #198754;
+    --info-color: #0dcaf0;
+    --warning-color: #ffc107;
+    --danger-color: #dc3545;
+    --light-color: #f8f9fa;
+    --dark-color: #212529;
+}
+
+body {
+    background-color: #f5f5f5;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* 카드 스타일링 */
+.card {
+    border: none;
+    border-radius: 10px;
+    box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+    transition: box-shadow 0.15s ease-in-out;
+}
+
+.card:hover {
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+}
+
+.card-header {
+    background-color: transparent;
+    border-bottom: 1px solid #dee2e6;
+    font-weight: 600;
+}
+
+/* 통계 카드 */
+.card.bg-primary,
+.card.bg-success,
+.card.bg-info,
+.card.bg-warning {
+    border-radius: 15px;
+    background: linear-gradient(135deg, var(--primary-color), #0056b3);
+}
+
+.card.bg-success {
+    background: linear-gradient(135deg, var(--success-color), #146c43);
+}
+
+.card.bg-info {
+    background: linear-gradient(135deg, var(--info-color), #0aa2c0);
+}
+
+.card.bg-warning {
+    background: linear-gradient(135deg, var(--warning-color), #ffca2c);
+}
+
+/* 테이블 스타일 */
+.table {
+    font-size: 0.9rem;
+}
+
+.table th {
+    background-color: var(--light-color);
+    border-top: none;
+    font-weight: 600;
+    color: var(--dark-color);
+}
+
+.table td {
+    vertical-align: middle;
+    border-color: #e9ecef;
+}
+
+.table-hover tbody tr:hover {
+    background-color: rgba(13, 110, 253, 0.05);
+}
+
+/* 순위 배지 */
+.rank-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    font-weight: bold;
+    font-size: 0.8rem;
+}
+
+.rank-1 {
+    background: linear-gradient(45deg, #ffd700, #ffed4e);
+    color: #333;
+}
+
+.rank-2 {
+    background: linear-gradient(45deg, #c0c0c0, #e8e8e8);
+    color: #333;
+}
+
+.rank-3 {
+    background: linear-gradient(45deg, #cd7f32, #daa520);
+    color: #fff;
+}
+
+.rank-other {
+    background-color: #6c757d;
+    color: #fff;
+}
+
+/* 회사별 순위 리스트 */
+.company-ranking-item {
+    display: flex;
+    justify-content: between;
+    align-items: center;
+    padding: 10px;
+    margin-bottom: 8px;
+    background-color: #fff;
+    border-radius: 8px;
+    border: 1px solid #e9ecef;
+    transition: transform 0.2s ease;
+}
+
+.company-ranking-item:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.company-name {
+    font-weight: 600;
+    color: var(--dark-color);
+}
+
+.fee-rate {
+    font-weight: 700;
+    color: var(--success-color);
+}
+
+/* 검색 결과 */
+.search-result-item {
+    background-color: #fff;
+    border: 1px solid #e9ecef;
+    border-radius: 8px;
+    padding: 15px;
+    margin-bottom: 10px;
+    transition: border-color 0.2s ease;
+}
+
+.search-result-item:hover {
+    border-color: var(--primary-color);
+}
+
+.product-name {
+    font-weight: 600;
+    color: var(--dark-color);
+    margin-bottom: 5px;
+}
+
+.product-details {
+    font-size: 0.85rem;
+    color: #6c757d;
+}
+
+/* 로딩 스피너 커스터마이징 */
+.spinner-border {
+    color: var(--primary-color);
+}
+
+/* 네비게이션 */
+.navbar-brand {
+    font-weight: 700;
+    font-size: 1.2rem;
+}
+
+/* 푸터 */
+footer {
+    margin-top: auto;
+}
+
+/* 반응형 디자인 */
+@media (max-width: 768px) {
+    .container-fluid {
+        padding: 0 15px;
+    }
+    
+    .card-body {
+        padding: 1rem;
+    }
+    
+    .table-responsive {
+        border: none;
+    }
+    
+    .table {
+        font-size: 0.8rem;
+    }
+    
+    .company-ranking-item {
+        padding: 8px;
+    }
+}
+
+@media (max-width: 576px) {
+    h2 {
+        font-size: 1.5rem;
+    }
+    
+    .card-title {
+        font-size: 0.9rem;
+    }
+    
+    .table th,
+    .table td {
+        padding: 0.5rem;
+        font-size: 0.75rem;
+    }
+}
+
+/* 차트 컨테이너 */
+.chart-container {
+    position: relative;
+    height: 300px;
+    margin: 20px 0;
+}
+
+/* 성공/실패 메시지 */
+.alert {
+    border: none;
+    border-radius: 10px;
+}
+
+.alert-success {
+    background-color: #d1edff;
+    color: #0c5460;
+}
+
+.alert-danger {
+    background-color: #f8d7da;
+    color: #721c24;
+}
+
+/* 버튼 스타일 개선 */
+.btn {
+    border-radius: 8px;
+    font-weight: 500;
+    transition: all 0.2s ease;
+}
+
+.btn:hover {
+    transform: translateY(-1px);
+}
+
+/* 원금보장 배지 */
+.guarantee-badge {
+    font-size: 0.75rem;
+    padding: 0.25rem 0.5rem;
+    border-radius: 12px;
+}
+
+.guarantee-yes {
+    background-color: #d4edda;
+    color: #155724;
+    border: 1px solid #c3e6cb;
+}
+
+.guarantee-no {
+    background-color: #f8d7da;
+    color: #721c24;
+    border: 1px solid #f5c6cb;
+}
+
+/* 수치 강조 */
+.highlight-number {
+    font-weight: 700;
+    font-size: 1.1em;
+}
+
+.fee-rate-low {
+    color: var(--success-color);
+}
+
+.fee-rate-medium {
+    color: var(--warning-color);
+}
+
+.fee-rate-high {
+    color: var(--danger-color);
+}
+
+/* === AI 챗봇 스타일 === */
+.chat-container {
+    border: 1px solid #e9ecef;
+    border-radius: 10px;
+    height: 400px;
+    display: flex;
+    flex-direction: column;
+}
+
+.chat-messages {
+    flex: 1;
+    padding: 15px;
+    overflow-y: auto;
+    background: #fafbfc;
+}
+
+.chat-input-container {
+    padding: 15px;
+    border-top: 1px solid #e9ecef;
+    background: white;
+    border-radius: 0 0 10px 10px;
+}
+
+.ai-message {
+    margin-bottom: 15px;
+}
+
+.user-message {
+    margin-bottom: 15px;
+    text-align: right;
+}
+
+.message-content {
+    display: inline-block;
+    max-width: 80%;
+    padding: 12px 16px;
+    border-radius: 18px;
+    font-size: 0.9rem;
+    line-height: 1.4;
+}
+
+.ai-message .message-content {
+    background: linear-gradient(135deg, #e3f2fd 0%, #f3e5f5 100%);
+    color: #333;
+    border: 1px solid #e1f5fe;
+}
+
+.user-message .message-content {
+    background: linear-gradient(135deg, #4CAF50 0%, #45a049 100%);
+    color: white;
+}
+
+.message-timestamp {
+    font-size: 0.75rem;
+    color: #6c757d;
+    margin-top: 5px;
+}
+
+.ai-message .message-timestamp {
+    text-align: left;
+}
+
+.user-message .message-timestamp {
+    text-align: right;
+}
+
+/* 타이핑 인디케이터 */
+.typing-indicator {
+    display: flex;
+    align-items: center;
+    padding: 12px 16px;
+    margin-bottom: 15px;
+}
+
+.typing-dots {
+    display: flex;
+    gap: 4px;
+}
+
+.typing-dot {
+    width: 8px;
+    height: 8px;
+    background-color: #6c757d;
+    border-radius: 50%;
+    animation: typing 1.4s infinite ease-in-out;
+}
+
+.typing-dot:nth-child(1) { animation-delay: -0.32s; }
+.typing-dot:nth-child(2) { animation-delay: -0.16s; }
+
+@keyframes typing {
+    0%, 80%, 100% { 
+        transform: scale(0.8);
+        opacity: 0.5;
+    }
+    40% { 
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+/* 빠른 질문 버튼 */
+.quick-question-btn {
+    font-size: 0.8rem;
+    margin-bottom: 5px;
+    border-radius: 15px;
+    transition: all 0.2s ease;
+}
+
+.quick-question-btn:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+/* 사용자 프로필 섹션 */
+.user-profile-section {
+    border-bottom: 1px solid #e9ecef;
+    padding-bottom: 15px;
+}
+
+/* 스크롤바 커스터마이징 */
+.chat-messages::-webkit-scrollbar {
+    width: 6px;
+}
+
+.chat-messages::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 3px;
+}
+
+.chat-messages::-webkit-scrollbar-thumb {
+    background: #c1c1c1;
+    border-radius: 3px;
+}
+
+.chat-messages::-webkit-scrollbar-thumb:hover {
+    background: #a1a1a1;
+}
+
+/* 로딩 상태 */
+.chat-loading {
+    opacity: 0.7;
+    pointer-events: none;
+}
+
+.send-button-loading {
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+
+/* 에러 메시지 */
+.error-message .message-content {
+    background: linear-gradient(135deg, #ffebee 0%, #fce4ec 100%);
+    color: #c62828;
+    border: 1px solid #ffcdd2;
+}
+
+/* 반응형 채팅 */
+@media (max-width: 768px) {
+    .chat-container {
+        height: 350px;
+    }
+    
+    .message-content {
+        max-width: 90%;
+        font-size: 0.85rem;
+        padding: 10px 14px;
+    }
+    
+    .quick-question-btn {
+        font-size: 0.75rem;
+        padding: 4px 8px;
+    }
+}
