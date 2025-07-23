@@ -101,7 +101,13 @@ class ScenarioAnalysisRequest(BaseModel):
 
 @app.get("/", response_class=HTMLResponse)
 async def home(request: Request):
-    return templates.TemplateResponse("index.html", {"request": request})
+    """메인 페이지 - AI 연금 진단 및 상담"""
+    return templates.TemplateResponse("main.html", {"request": request})
+
+@app.get("/dashboard", response_class=HTMLResponse)
+async def dashboard(request: Request):
+    """대시보드 페이지 - 연금상품 데이터"""
+    return templates.TemplateResponse("dashboard.html", {"request": request})
 
 @app.get("/api/health")
 async def health():

@@ -1,0 +1,771 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>AI 연금 전문가 | 맞춤형 연금 진단 및 상담</title>
+    
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    
+    <style>
+        :root {
+            --primary-color: #0d6efd;
+            --success-color: #198754;
+            --info-color: #0dcaf0;
+            --warning-color: #ffc107;
+            --danger-color: #dc3545;
+            --bg-primary: #f8f9fa;
+            --bg-secondary: #ffffff;
+            --text-primary: #212529;
+            --text-secondary: #6c757d;
+            --border-color: #dee2e6;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.6;
+        }
+
+        .app-container {
+            max-width: 430px;
+            margin: 0 auto;
+            min-height: 100vh;
+            background: var(--bg-secondary);
+            box-shadow: 0 0 20px rgba(0,0,0,0.1);
+        }
+
+        /* 헤더 */
+        .header {
+            background: linear-gradient(135deg, var(--primary-color), #0056b3);
+            padding: 20px 16px;
+            text-align: center;
+            color: white;
+            position: relative;
+        }
+
+        .header-title {
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .header-subtitle {
+            font-size: 14px;
+            opacity: 0.9;
+        }
+
+        .nav-links {
+            position: absolute;
+            top: 20px;
+            right: 16px;
+        }
+
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            font-size: 14px;
+            padding: 8px 12px;
+            border-radius: 20px;
+            background: rgba(255,255,255,0.2);
+            transition: all 0.3s ease;
+        }
+
+        .nav-links a:hover {
+            background: rgba(255,255,255,0.3);
+        }
+
+        /* 진단 섹션 */
+        .diagnosis-section {
+            padding: 24px 16px;
+            background: var(--bg-secondary);
+        }
+
+        .section-title {
+            font-size: 20px;
+            font-weight: 700;
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .diagnosis-card {
+            background: var(--bg-secondary);
+            border: 2px solid var(--border-color);
+            border-radius: 16px;
+            padding: 20px;
+            margin-bottom: 16px;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+            transition: all 0.3s ease;
+        }
+
+        .diagnosis-card:hover {
+            border-color: var(--primary-color);
+            transform: translateY(-2px);
+        }
+
+        .form-row {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 16px;
+        }
+
+        .form-group {
+            flex: 1;
+        }
+
+        .form-label {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 8px;
+            display: block;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 12px 16px;
+            border: 2px solid var(--border-color);
+            border-radius: 12px;
+            font-size: 16px;
+            transition: all 0.3s ease;
+        }
+
+        .form-control:focus {
+            border-color: var(--primary-color);
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(13, 110, 253, 0.1);
+        }
+
+        .btn-diagnose {
+            width: 100%;
+            padding: 16px;
+            background: linear-gradient(135deg, var(--success-color), #146c43);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 16px;
+        }
+
+        .btn-diagnose:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(25, 135, 84, 0.3);
+        }
+
+        /* 채팅 섹션 */
+        .chat-section {
+            background: var(--bg-primary);
+            padding: 0;
+            flex: 1;
+        }
+
+        .chat-header {
+            background: var(--bg-secondary);
+            padding: 16px;
+            border-bottom: 1px solid var(--border-color);
+            text-align: center;
+        }
+
+        .chat-container {
+            height: 500px;
+            display: flex;
+            flex-direction: column;
+            background: var(--bg-secondary);
+        }
+
+        .chat-messages {
+            flex: 1;
+            padding: 16px;
+            overflow-y: auto;
+            background: #fafbfc;
+        }
+
+        .ai-message, .user-message {
+            margin-bottom: 16px;
+            animation: fadeInUp 0.3s ease;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .message-content {
+            display: inline-block;
+            max-width: 85%;
+            padding: 12px 16px;
+            border-radius: 18px;
+            font-size: 15px;
+            line-height: 1.4;
+        }
+
+        .ai-message {
+            text-align: left;
+        }
+
+        .ai-message .message-content {
+            background: linear-gradient(135deg, #e3f2fd, #f3e5f5);
+            color: #333;
+            border: 1px solid #e1f5fe;
+        }
+
+        .user-message {
+            text-align: right;
+        }
+
+        .user-message .message-content {
+            background: linear-gradient(135deg, var(--primary-color), #0056b3);
+            color: white;
+        }
+
+        .message-timestamp {
+            font-size: 12px;
+            color: var(--text-secondary);
+            margin-top: 4px;
+        }
+
+        .chat-input-container {
+            padding: 16px;
+            background: white;
+            border-top: 1px solid var(--border-color);
+        }
+
+        .input-group {
+            display: flex;
+            gap: 8px;
+        }
+
+        .chat-input {
+            flex: 1;
+            padding: 12px 16px;
+            border: 2px solid var(--border-color);
+            border-radius: 25px;
+            font-size: 16px;
+        }
+
+        .chat-input:focus {
+            border-color: var(--primary-color);
+            outline: none;
+        }
+
+        .send-btn {
+            padding: 12px 20px;
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .send-btn:hover {
+            background: #0056b3;
+            transform: scale(1.05);
+        }
+
+        /* 빠른 질문 버튼 */
+        .quick-questions {
+            padding: 16px;
+            background: var(--bg-secondary);
+        }
+
+        .quick-questions-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+        }
+
+        .quick-question-btn {
+            padding: 12px 16px;
+            background: var(--bg-primary);
+            border: 2px solid var(--border-color);
+            border-radius: 12px;
+            font-size: 13px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+        }
+
+        .quick-question-btn:hover {
+            border-color: var(--primary-color);
+            background: #e3f2fd;
+        }
+
+        /* 타이핑 인디케이터 */
+        .typing-indicator {
+            display: flex;
+            align-items: center;
+            padding: 12px 16px;
+            margin-bottom: 16px;
+        }
+
+        .typing-dots {
+            display: flex;
+            gap: 4px;
+            margin-left: 8px;
+        }
+
+        .typing-dot {
+            width: 8px;
+            height: 8px;
+            background-color: var(--text-secondary);
+            border-radius: 50%;
+            animation: typing 1.4s infinite ease-in-out;
+        }
+
+        .typing-dot:nth-child(1) { animation-delay: -0.32s; }
+        .typing-dot:nth-child(2) { animation-delay: -0.16s; }
+
+        @keyframes typing {
+            0%, 80%, 100% { 
+                transform: scale(0.8);
+                opacity: 0.5;
+            }
+            40% { 
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+
+        /* 반응형 */
+        @media (min-width: 768px) {
+            .app-container {
+                max-width: 800px;
+            }
+            
+            .form-row {
+                display: grid;
+                grid-template-columns: 1fr 1fr;
+                gap: 16px;
+            }
+
+            .quick-questions-grid {
+                grid-template-columns: repeat(4, 1fr);
+            }
+        }
+
+        /* 숨김/표시 클래스 */
+        .section-hidden {
+            display: none;
+        }
+
+        .section-visible {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <div class="app-container">
+        <!-- 헤더 -->
+        <div class="header">
+            <div class="nav-links">
+                <a href="/dashboard"><i class="fas fa-chart-line me-1"></i>대시보드</a>
+            </div>
+            <div class="header-title">🤖 AI 연금 전문가</div>
+            <div class="header-subtitle">맞춤형 연금 진단 및 전문 상담 서비스</div>
+        </div>
+
+        <!-- 진단 섹션 -->
+        <div class="diagnosis-section" id="diagnosisSection">
+            <div class="section-title">
+                <i class="fas fa-stethoscope text-success"></i>
+                연금 진단 및 분석
+            </div>
+            
+            <div class="diagnosis-card">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label class="form-label">나이</label>
+                        <input type="number" class="form-control" id="userAge" placeholder="35" min="20" max="80">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">월소득 (만원)</label>
+                        <input type="number" class="form-control" id="userIncome" placeholder="500" min="100" max="10000">
+                    </div>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label class="form-label">투자 성향</label>
+                        <select class="form-control" id="userRisk">
+                            <option value="conservative">안정형 (원금보장 중시)</option>
+                            <option value="moderate" selected>균형형 (적정 수익 추구)</option>
+                            <option value="aggressive">적극형 (고수익 추구)</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">목표 은퇴나이</label>
+                        <input type="number" class="form-control" id="userRetirement" placeholder="65" min="50" max="80">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">현재 연금 준비 상황</label>
+                    <select class="form-control" id="currentPreparation">
+                        <option value="none">아직 준비하지 않음</option>
+                        <option value="national">국민연금만 가입</option>
+                        <option value="some">일부 연금상품 가입 중</option>
+                        <option value="well">충분히 준비 중</option>
+                    </select>
+                </div>
+
+                <button class="btn-diagnose" onclick="startDiagnosis()">
+                    <i class="fas fa-search me-2"></i>AI 진단 시작하기
+                </button>
+            </div>
+        </div>
+
+        <!-- 채팅 섹션 -->
+        <div class="chat-section section-hidden" id="chatSection">
+            <div class="chat-header">
+                <div class="section-title">
+                    <i class="fas fa-comments text-primary"></i>
+                    AI 전문가와 실시간 상담
+                </div>
+                <div style="font-size: 14px; color: var(--text-secondary);">
+                    개인 맞춤형 연금 상담을 받아보세요
+                </div>
+            </div>
+            
+            <div class="chat-container">
+                <div class="chat-messages" id="chatMessages">
+                    <!-- 초기 AI 메시지 -->
+                    <div class="ai-message">
+                        <div class="message-content">
+                            <i class="fas fa-robot me-2"></i>
+                            안녕하세요! 저는 AI 연금 전문가입니다. 
+                            진단 결과를 바탕으로 맞춤형 연금 상담을 도와드리겠습니다. 🎯
+                        </div>
+                        <div class="message-timestamp">방금 전</div>
+                    </div>
+                </div>
+                
+                <div class="chat-input-container">
+                    <div class="input-group">
+                        <input type="text" class="chat-input" id="chatInput" 
+                               placeholder="연금 관련 질문을 입력해주세요..." maxlength="500">
+                        <button class="send-btn" id="sendChatBtn">
+                            <i class="fas fa-paper-plane"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 빠른 질문 버튼들 -->
+            <div class="quick-questions">
+                <div style="font-size: 14px; font-weight: 600; margin-bottom: 12px; text-align: center;">
+                    💡 빠른 질문
+                </div>
+                <div class="quick-questions-grid">
+                    <button class="quick-question-btn" data-question="내 나이에 맞는 연금 상품 추천해줘">
+                        👤 나이별 추천
+                    </button>
+                    <button class="quick-question-btn" data-question="수수료가 가장 낮은 연금 상품은?">
+                        💰 최저 수수료
+                    </button>
+                    <button class="quick-question-btn" data-question="연금저축과 퇴직연금 차이점이 뭐야?">
+                        ❓ 상품 차이점
+                    </button>
+                    <button class="quick-question-btn" data-question="은퇴 후 월 300만원 생활하려면 얼마나 모아야 해?">
+                        📊 은퇴 계획
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- JavaScript -->
+    <script>
+        class PensionAIApp {
+            constructor() {
+                this.apiBase = '/api';
+                this.userId = this.generateUserId();
+                this.userProfile = null;
+                this.init();
+            }
+
+            generateUserId() {
+                return 'user_' + Math.random().toString(36).substr(2, 9);
+            }
+
+            init() {
+                this.setupEventListeners();
+            }
+
+            setupEventListeners() {
+                // 채팅 이벤트
+                const chatInput = document.getElementById('chatInput');
+                const sendBtn = document.getElementById('sendChatBtn');
+                const quickQuestionBtns = document.querySelectorAll('.quick-question-btn');
+
+                // 전송 버튼 클릭
+                sendBtn.addEventListener('click', () => {
+                    this.sendMessage();
+                });
+
+                // Enter 키로 메시지 전송
+                chatInput.addEventListener('keypress', (e) => {
+                    if (e.key === 'Enter' && !e.shiftKey) {
+                        e.preventDefault();
+                        this.sendMessage();
+                    }
+                });
+
+                // 빠른 질문 버튼들
+                quickQuestionBtns.forEach(btn => {
+                    btn.addEventListener('click', () => {
+                        const question = btn.getAttribute('data-question');
+                        chatInput.value = question;
+                        this.sendMessage();
+                    });
+                });
+            }
+
+            async startDiagnosis() {
+                // 사용자 입력 수집
+                const age = parseInt(document.getElementById('userAge').value);
+                const income = parseInt(document.getElementById('userIncome').value);
+                const risk = document.getElementById('userRisk').value;
+                const retirement = parseInt(document.getElementById('userRetirement').value);
+                const preparation = document.getElementById('currentPreparation').value;
+
+                // 입력 검증
+                if (!age || !income || !retirement) {
+                    alert('모든 필수 정보를 입력해주세요.');
+                    return;
+                }
+
+                if (age < 20 || age > 80) {
+                    alert('나이는 20세 ~ 80세 사이로 입력해주세요.');
+                    return;
+                }
+
+                // 사용자 프로필 저장
+                this.userProfile = {
+                    age: age,
+                    monthly_income: income,
+                    risk_preference: risk,
+                    target_retirement_age: retirement,
+                    current_preparation: preparation
+                };
+
+                // 진단 결과 생성
+                const diagnosisMessage = this.generateDiagnosisMessage();
+
+                // 채팅 섹션으로 전환
+                this.showChatSection();
+
+                // AI 진단 메시지 추가
+                setTimeout(() => {
+                    this.addMessageToChat(diagnosisMessage, 'ai');
+                }, 500);
+            }
+
+            generateDiagnosisMessage() {
+                const { age, monthly_income, risk_preference, target_retirement_age, current_preparation } = this.userProfile;
+                const yearsToRetirement = target_retirement_age - age;
+                const riskMap = {
+                    'conservative': '안정형',
+                    'moderate': '균형형', 
+                    'aggressive': '적극형'
+                };
+                const prepMap = {
+                    'none': '준비 없음',
+                    'national': '국민연금만',
+                    'some': '일부 준비',
+                    'well': '충분히 준비'
+                };
+
+                return `📋 **연금 진단 결과**
+
+**기본 정보**
+• 나이: ${age}세 (은퇴까지 ${yearsToRetirement}년)
+• 월소득: ${monthly_income}만원
+• 투자성향: ${riskMap[risk_preference]}
+• 현재 준비상황: ${prepMap[current_preparation]}
+
+**맞춤형 분석**
+${this.getPersonalizedAnalysis()}
+
+이제 구체적인 질문을 해주시면 더 자세한 상담을 도와드리겠습니다! 💪`;
+            }
+
+            getPersonalizedAnalysis() {
+                const { age, monthly_income, target_retirement_age, current_preparation } = this.userProfile;
+                const yearsToRetirement = target_retirement_age - age;
+
+                let analysis = '';
+
+                // 나이대별 분석
+                if (age < 30) {
+                    analysis += '• 젊은 나이의 장점을 활용해 장기 투자 전략이 유리합니다.\n';
+                } else if (age < 40) {
+                    analysis += '• 안정적인 자산 형성이 중요한 시기입니다.\n';
+                } else if (age < 50) {
+                    analysis += '• 은퇴 준비를 본격적으로 시작해야 하는 중요한 시기입니다.\n';
+                } else {
+                    analysis += '• 보수적인 투자와 함께 빠른 준비가 필요합니다.\n';
+                }
+
+                // 소득별 분석
+                if (monthly_income < 300) {
+                    analysis += '• 소득 대비 효율적인 연금 상품 선택이 중요합니다.\n';
+                } else if (monthly_income < 600) {
+                    analysis += '• 적절한 연금 분산 투자를 고려해보세요.\n';
+                } else {
+                    analysis += '• 다양한 연금 상품을 활용한 포트폴리오 구성을 권장합니다.\n';
+                }
+
+                // 준비 상황별 분석
+                if (current_preparation === 'none') {
+                    analysis += '• 연금저축부터 시작하여 단계적으로 확대해나가세요.\n';
+                } else if (current_preparation === 'national') {
+                    analysis += '• 개인연금 추가 가입을 통한 보완이 필요합니다.\n';
+                }
+
+                return analysis;
+            }
+
+            showChatSection() {
+                document.getElementById('diagnosisSection').classList.add('section-hidden');
+                document.getElementById('chatSection').classList.remove('section-hidden');
+                document.getElementById('chatSection').classList.add('section-visible');
+            }
+
+            async sendMessage() {
+                const chatInput = document.getElementById('chatInput');
+                const message = chatInput.value.trim();
+                
+                if (!message) return;
+
+                // 사용자 메시지 표시
+                this.addMessageToChat(message, 'user');
+                chatInput.value = '';
+
+                // 타이핑 인디케이터 표시
+                this.showTypingIndicator();
+
+                try {
+                    // API 호출
+                    const response = await fetch(`${this.apiBase}/ai-chat-with-profile`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({
+                            message: message,
+                            user_id: this.userId,
+                            user_profile: this.userProfile
+                        })
+                    });
+
+                    const result = await response.json();
+                    
+                    // 타이핑 인디케이터 제거
+                    this.hideTypingIndicator();
+
+                    if (result.success) {
+                        this.addMessageToChat(result.response, 'ai');
+                    } else {
+                        const errorMsg = result.error || '서버 오류가 발생했습니다';
+                        const detailedError = `죄송합니다. 오류가 발생했습니다: ${errorMsg}`;
+                        this.addMessageToChat(detailedError, 'ai', true);
+                        console.error('AI Chat Error:', result);
+                    }
+
+                } catch (error) {
+                    console.error('메시지 전송 실패:', error);
+                    this.hideTypingIndicator();
+                    this.addMessageToChat('네트워크 오류가 발생했습니다. 잠시 후 다시 시도해주세요.', 'ai', true);
+                }
+            }
+
+            addMessageToChat(message, sender, isError = false) {
+                const chatMessages = document.getElementById('chatMessages');
+                const messageDiv = document.createElement('div');
+                const timestamp = new Date().toLocaleTimeString('ko-KR', { hour: '2-digit', minute: '2-digit' });
+                
+                messageDiv.className = sender === 'user' ? 'user-message' : 'ai-message';
+                if (isError) messageDiv.classList.add('error-message');
+                
+                const icon = sender === 'user' ? '<i class="fas fa-user me-2"></i>' : '<i class="fas fa-robot me-2"></i>';
+                
+                messageDiv.innerHTML = `
+                    <div class="message-content">
+                        ${sender === 'ai' ? icon : ''}
+                        ${this.formatMessage(message)}
+                        ${sender === 'user' ? icon : ''}
+                    </div>
+                    <div class="message-timestamp">${timestamp}</div>
+                `;
+                
+                chatMessages.appendChild(messageDiv);
+                chatMessages.scrollTop = chatMessages.scrollHeight;
+            }
+
+            formatMessage(message) {
+                return message
+                    .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+                    .replace(/\*(.*?)\*/g, '<em>$1</em>')
+                    .replace(/\n/g, '<br>');
+            }
+
+            showTypingIndicator() {
+                const chatMessages = document.getElementById('chatMessages');
+                const typingDiv = document.createElement('div');
+                typingDiv.id = 'typingIndicator';
+                typingDiv.className = 'typing-indicator';
+                typingDiv.innerHTML = `
+                    <i class="fas fa-robot me-2"></i>
+                    <span class="typing-dots">
+                        <span class="typing-dot"></span>
+                        <span class="typing-dot"></span>
+                        <span class="typing-dot"></span>
+                    </span>
+                `;
+                
+                chatMessages.appendChild(typingDiv);
+                chatMessages.scrollTop = chatMessages.scrollHeight;
+            }
+
+            hideTypingIndicator() {
+                const typingIndicator = document.getElementById('typingIndicator');
+                if (typingIndicator) {
+                    typingIndicator.remove();
+                }
+            }
+        }
+
+        // 전역 함수
+        function startDiagnosis() {
+            window.pensionApp.startDiagnosis();
+        }
+
+        // 앱 초기화
+        document.addEventListener('DOMContentLoaded', () => {
+            window.pensionApp = new PensionAIApp();
+        });
+    </script>
+</body>
+</html>
