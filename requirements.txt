@@ -23,8 +23,7 @@ xmltodict>=0.13.0
 # AI/LLM
 openai==1.12.0
 
-# MCP Protocol
-mcp>=1.0.0
+# MCP Protocol - removed as it may not be available in PyPI
 
 # Production Server
 gunicorn==21.2.0
