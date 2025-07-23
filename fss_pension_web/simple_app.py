@@ -222,13 +222,26 @@ async def ai_status():
         try:
             from openai import AsyncOpenAI
             client = AsyncOpenAI(api_key=OPENAI_API_KEY)
-            # 간단한 API 호출로 연결 테스트
-            test_response = await client.chat.completions.create(
-                model="gpt-4",
-                messages=[{"role": "user", "content": "test"}],
-                max_tokens=5
-            )
-            status["openai_test"] = "Success"
+            # 간단한 API 호출로 연결 테스트 (fallback 포함)
+            try:
+                test_response = await client.chat.completions.create(
+                    model="gpt-4.1-mini-2025-04-14",
+                    messages=[{"role": "user", "content": "test"}],
+                    max_tokens=5
+                )
+                status["openai_test"] = "Success (gpt-4.1-mini-2025-04-14)"
+            except Exception as primary_error:
+                # 모델이 없을 경우 대체 모델로 시도
+                try:
+                    test_response = await client.chat.completions.create(
+                        model="gpt-3.5-turbo",
+                        messages=[{"role": "user", "content": "test"}],
+                        max_tokens=5
+                    )
+                    status["openai_test"] = "Success (fallback to gpt-3.5-turbo)"
+                    status["model_fallback"] = f"Primary model error: {str(primary_error)}"
+                except Exception as fallback_error:
+                    raise fallback_error
         except Exception as e:
             status["openai_test"] = f"Failed: {str(e)}"
     else:

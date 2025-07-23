@@ -143,14 +143,38 @@ class PensionAIConsultant:
             # 현재 질문 추가
             messages.append({"role": "user", "content": message})
             
-            # OpenAI API 호출
-            response = await self.openai_client.chat.completions.create(
-                model="gpt-4",
-                messages=messages,
-                max_tokens=1500,
-                temperature=0.7,
-                top_p=0.9
-            )
+            # OpenAI API 호출 (모델 fallback 포함)
+            try:
+                response = await self.openai_client.chat.completions.create(
+                    model="gpt-4.1-mini-2025-04-14",  # 요청한 모델
+                    messages=messages,
+                    max_tokens=1500,
+                    temperature=0.7,
+                    top_p=0.9
+                )
+            except Exception as model_error:
+                if "model" in str(model_error).lower() or "invalid" in str(model_error).lower():
+                    # 모델이 없을 경우 대체 모델 사용
+                    logger.warning(f"Primary model failed, trying fallback: {model_error}")
+                    try:
+                        response = await self.openai_client.chat.completions.create(
+                            model="gpt-3.5-turbo",  # 첫 번째 대체 모델
+                            messages=messages,
+                            max_tokens=1500,
+                            temperature=0.7,
+                            top_p=0.9
+                        )
+                    except:
+                        # 마지막 대체 모델
+                        response = await self.openai_client.chat.completions.create(
+                            model="gpt-3.5-turbo-0125",  # 가장 최신 3.5 모델
+                            messages=messages,
+                            max_tokens=1500,
+                            temperature=0.7,
+                            top_p=0.9
+                        )
+                else:
+                    raise model_error
             
             ai_response = response.choices[0].message.content
             
@@ -215,7 +239,7 @@ class PensionAIConsultant:
             """
             
             response = await self.openai_client.chat.completions.create(
-                model="gpt-4",
+                model="gpt-4.1-mini-2025-04-14",
                 messages=[
                     {"role": "system", "content": self._get_system_prompt().format(
                         current_time=datetime.now().strftime("%Y년 %m월 %d일")
@@ -269,7 +293,7 @@ class PensionAIConsultant:
             """
             
             response = await self.openai_client.chat.completions.create(
-                model="gpt-4",
+                model="gpt-4.1-mini-2025-04-14",
                 messages=[
                     {"role": "system", "content": self._get_system_prompt().format(
                         current_time=datetime.now().strftime("%Y년 %m월 %d일")

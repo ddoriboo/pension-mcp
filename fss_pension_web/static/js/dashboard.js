@@ -311,7 +311,11 @@ class PensionDashboard {
             if (result.success) {
                 this.addMessageToChat(result.response, 'ai');
             } else {
-                this.addMessageToChat('죄송합니다. 서버 오류가 발생했습니다. 잠시 후 다시 시도해주세요.', 'ai', true);
+                // 더 자세한 에러 메시지 표시
+                const errorMsg = result.error || '서버 오류가 발생했습니다';
+                const detailedError = `죄송합니다. 오류가 발생했습니다: ${errorMsg}`;
+                this.addMessageToChat(detailedError, 'ai', true);
+                console.error('AI Chat Error:', result);
             }
 
         } catch (error) {
