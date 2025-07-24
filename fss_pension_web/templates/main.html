@@ -284,32 +284,122 @@
             transform: scale(1.05);
         }
 
-        /* 빠른 질문 버튼 */
-        .quick-questions {
-            padding: 16px;
+        /* 빠른 질문 버튼 - 중장년층 친화적 */
+        .question-interface {
+            padding: 20px 16px;
             background: var(--bg-secondary);
+            border-top: 1px solid var(--border-color);
+        }
+
+        .question-category {
+            margin-bottom: 20px;
+        }
+
+        .category-label {
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .category-select {
+            width: 100%;
+            padding: 14px 16px;
+            border: 2px solid var(--border-color);
+            border-radius: 12px;
+            font-size: 16px;
+            background: white;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .category-select:focus {
+            border-color: var(--primary-color);
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(13, 110, 253, 0.1);
         }
 
         .quick-questions-grid {
             display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 8px;
+            grid-template-columns: 1fr;
+            gap: 12px;
+            margin-top: 16px;
         }
 
         .quick-question-btn {
-            padding: 12px 16px;
-            background: var(--bg-primary);
+            padding: 16px 20px;
+            background: linear-gradient(135deg, #f8f9fa, #e9ecef);
             border: 2px solid var(--border-color);
             border-radius: 12px;
-            font-size: 13px;
+            font-size: 15px;
+            font-weight: 500;
             cursor: pointer;
             transition: all 0.3s ease;
-            text-align: center;
+            text-align: left;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            min-height: 60px;
         }
 
         .quick-question-btn:hover {
             border-color: var(--primary-color);
-            background: #e3f2fd;
+            background: linear-gradient(135deg, #e3f2fd, #f3e5f5);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+
+        .question-icon {
+            font-size: 24px;
+            width: 32px;
+            text-align: center;
+        }
+
+        .question-text {
+            flex: 1;
+            line-height: 1.4;
+        }
+
+        /* 후속 질문 버튼들 */
+        .follow-up-questions {
+            margin-top: 16px;
+            padding: 16px;
+            background: #f8f9fa;
+            border-radius: 12px;
+            border-left: 4px solid var(--primary-color);
+        }
+
+        .follow-up-title {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--text-secondary);
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .follow-up-btn {
+            display: inline-block;
+            padding: 8px 12px;
+            margin: 4px 6px 4px 0;
+            background: white;
+            border: 1px solid var(--border-color);
+            border-radius: 20px;
+            font-size: 13px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            color: var(--text-primary);
+        }
+
+        .follow-up-btn:hover {
+            background: var(--primary-color);
+            color: white;
+            transform: translateY(-1px);
         }
 
         /* 타이핑 인디케이터 */
@@ -348,6 +438,88 @@
             }
         }
 
+        /* 중장년층 친화적 UI 개선 */
+        .form-control, .category-select {
+            font-size: 17px; /* iOS에서 확대 방지 */
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            appearance: none;
+        }
+
+        .category-select {
+            background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='%23343a40' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M2 5l6 6 6-6'/%3e%3c/svg%3e");
+            background-repeat: no-repeat;
+            background-position: right 12px center;
+            background-size: 16px 12px;
+        }
+
+        /* 접근성 개선 */
+        .quick-question-btn:focus,
+        .follow-up-btn:focus,
+        .btn-diagnose:focus,
+        .send-btn:focus {
+            outline: 3px solid #4fc3f7;
+            outline-offset: 2px;
+        }
+
+        /* 터치 친화적 크기 */
+        .quick-question-btn,
+        .follow-up-btn,
+        .btn-diagnose,
+        .send-btn,
+        .category-select {
+            min-height: 48px; /* 터치하기 쉬운 최소 크기 */
+        }
+
+        /* 로딩 상태 표시 */
+        .btn-loading {
+            opacity: 0.7;
+            cursor: not-allowed;
+            position: relative;
+        }
+
+        .btn-loading::after {
+            content: '';
+            position: absolute;
+            width: 16px;
+            height: 16px;
+            margin: auto;
+            border: 2px solid transparent;
+            border-top-color: #ffffff;
+            border-radius: 50%;
+            animation: spin 1s ease infinite;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        @keyframes spin {
+            0% { transform: translate(-50%, -50%) rotate(0deg); }
+            100% { transform: translate(-50%, -50%) rotate(360deg); }
+        }
+
+        /* 메시지 스타일 개선 */
+        .message-list {
+            padding-left: 20px;
+            margin-bottom: 16px;
+        }
+
+        .message-list li {
+            padding: 4px 0;
+            line-height: 1.5;
+        }
+
+        .message-heading {
+            border-bottom: 1px solid #e9ecef;
+            padding-bottom: 8px;
+        }
+
+        .code-block {
+            font-family: 'Courier New', monospace;
+            white-space: pre-wrap;
+            overflow-x: auto;
+        }
+
         /* 반응형 */
         @media (min-width: 768px) {
             .app-container {
@@ -361,7 +533,57 @@
             }
 
             .quick-questions-grid {
-                grid-template-columns: repeat(4, 1fr);
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .question-text {
+                font-size: 16px;
+            }
+
+            .follow-up-btn {
+                font-size: 14px;
+                padding: 10px 16px;
+            }
+        }
+
+        @media (min-width: 1024px) {
+            .quick-questions-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        /* 다크모드 대응 */
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --bg-primary: #1a1a1a;
+                --bg-secondary: #2d2d2d;
+                --text-primary: #ffffff;
+                --text-secondary: #b0b0b0;
+                --border-color: #404040;
+            }
+        }
+
+        /* 고대비 모드 대응 */
+        @media (prefers-contrast: high) {
+            .quick-question-btn,
+            .follow-up-btn {
+                border-width: 3px;
+            }
+            
+            .form-control:focus,
+            .category-select:focus {
+                border-width: 3px;
+            }
+        }
+
+        /* 애니메이션 줄이기 선호 시 */
+        @media (prefers-reduced-motion: reduce) {
+            *,
+            *::before,
+            *::after {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
             }
         }
 
@@ -472,24 +694,50 @@
                 </div>
             </div>
 
-            <!-- 빠른 질문 버튼들 -->
-            <div class="quick-questions">
-                <div style="font-size: 14px; font-weight: 600; margin-bottom: 12px; text-align: center;">
-                    💡 빠른 질문
+            <!-- 질문 인터페이스 - 중장년층 친화적 -->
+            <div class="question-interface">
+                <!-- 질문 카테고리 선택 -->
+                <div class="question-category">
+                    <div class="category-label">
+                        <i class="fas fa-list-ul text-primary"></i>
+                        질문 주제를 선택해주세요
+                    </div>
+                    <select class="category-select" id="questionCategory">
+                        <option value="">-- 궁금한 주제를 선택하세요 --</option>
+                        <option value="products">🏷️ 연금상품 추천</option>
+                        <option value="fees">💰 수수료 비교</option>
+                        <option value="planning">📊 은퇴 계획</option>
+                        <option value="tax">🧾 세제 혜택</option>
+                        <option value="process">📝 가입 방법</option>
+                        <option value="general">❓ 기타 문의</option>
+                    </select>
                 </div>
-                <div class="quick-questions-grid">
-                    <button class="quick-question-btn" data-question="내 나이에 맞는 연금 상품 추천해줘">
-                        👤 나이별 추천
+
+                <!-- 카테고리별 질문 옵션들 -->
+                <div class="quick-questions-grid" id="categoryQuestions">
+                    <!-- 기본 추천 질문들 -->
+                    <button class="quick-question-btn" data-question="내 상황에 맞는 연금 상품을 추천해주세요">
+                        <span class="question-icon">🎯</span>
+                        <span class="question-text">내 상황에 맞는<br>연금 상품 추천받기</span>
                     </button>
-                    <button class="quick-question-btn" data-question="수수료가 가장 낮은 연금 상품은?">
-                        💰 최저 수수료
+                    <button class="quick-question-btn" data-question="수수료가 가장 낮은 연금 상품 5개를 알려주세요">
+                        <span class="question-icon">💸</span>
+                        <span class="question-text">수수료 최저가<br>상품 찾아보기</span>
                     </button>
-                    <button class="quick-question-btn" data-question="연금저축과 퇴직연금 차이점이 뭐야?">
-                        ❓ 상품 차이점
+                    <button class="quick-question-btn" data-question="은퇴 후 월 300만원으로 생활하려면 얼마나 준비해야 하나요?">
+                        <span class="question-icon">🏠</span>
+                        <span class="question-text">은퇴 후 생활비<br>계산해보기</span>
                     </button>
-                    <button class="quick-question-btn" data-question="은퇴 후 월 300만원 생활하려면 얼마나 모아야 해?">
-                        📊 은퇴 계획
+                    <button class="quick-question-btn" data-question="연금저축과 IRP의 차이점을 쉽게 설명해주세요">
+                        <span class="question-icon">📚</span>
+                        <span class="question-text">연금 상품 종류<br>차이점 알아보기</span>
                     </button>
+                </div>
+
+                <!-- 텍스트 입력 대안 -->
+                <div style="margin-top: 20px; text-align: center; color: var(--text-secondary); font-size: 14px;">
+                    <i class="fas fa-keyboard me-1"></i>
+                    또는 아래에 직접 질문을 입력하세요
                 </div>
             </div>
         </div>
@@ -517,7 +765,7 @@
                 // 채팅 이벤트
                 const chatInput = document.getElementById('chatInput');
                 const sendBtn = document.getElementById('sendChatBtn');
-                const quickQuestionBtns = document.querySelectorAll('.quick-question-btn');
+                const categorySelect = document.getElementById('questionCategory');
 
                 // 전송 버튼 클릭
                 sendBtn.addEventListener('click', () => {
@@ -532,14 +780,108 @@
                     }
                 });
 
-                // 빠른 질문 버튼들
-                quickQuestionBtns.forEach(btn => {
-                    btn.addEventListener('click', () => {
-                        const question = btn.getAttribute('data-question');
-                        chatInput.value = question;
-                        this.sendMessage();
-                    });
+                // 카테고리 선택 이벤트
+                categorySelect.addEventListener('change', (e) => {
+                    this.updateQuestionsByCategory(e.target.value);
                 });
+
+                // 빠른 질문 버튼들 (동적으로 생성되므로 이벤트 위임 사용)
+                document.addEventListener('click', (e) => {
+                    if (e.target.closest('.quick-question-btn')) {
+                        const btn = e.target.closest('.quick-question-btn');
+                        const question = btn.getAttribute('data-question');
+                        this.askQuestion(question);
+                    }
+                    if (e.target.closest('.follow-up-btn')) {
+                        const btn = e.target.closest('.follow-up-btn');
+                        const question = btn.getAttribute('data-question');
+                        this.askQuestion(question);
+                    }
+                });
+            }
+
+            // 카테고리별 질문 옵션 정의
+            getQuestionsByCategory(category) {
+                const questions = {
+                    'products': [
+                        { icon: '🎯', text: '내 나이와 소득에 맞는<br>상품 추천받기', question: '내 나이와 월소득에 맞는 연금상품을 추천해주세요' },
+                        { icon: '🏆', text: '인기 연금상품<br>TOP 5 보기', question: '가장 인기있는 연금상품 5개를 추천해주세요' },
+                        { icon: '🛡️', text: '안전한 원금보장<br>상품 찾기', question: '원금이 보장되는 안전한 연금상품을 알려주세요' },
+                        { icon: '📈', text: '고수익 연금상품<br>알아보기', question: '수익률이 높은 연금상품들을 비교해주세요' }
+                    ],
+                    'fees': [
+                        { icon: '💸', text: '수수료 최저가<br>상품 TOP 5', question: '수수료가 가장 낮은 연금상품 5개를 알려주세요' },
+                        { icon: '🔍', text: '수수료 비교<br>상세 분석', question: '연금상품 수수료를 상세히 비교 분석해주세요' },
+                        { icon: '💰', text: '수수료 절약<br>방법 알아보기', question: '연금 가입 시 수수료를 절약하는 방법을 알려주세요' },
+                        { icon: '📊', text: '회사별 수수료<br>순위 보기', question: '운용사별 수수료 순위를 보여주세요' }
+                    ],
+                    'planning': [
+                        { icon: '🏠', text: '은퇴 후 생활비<br>계산하기', question: '은퇴 후 월 300만원으로 생활하려면 얼마나 준비해야 하나요?' },
+                        { icon: '📅', text: '연령별 은퇴<br>준비 전략', question: '내 나이에 맞는 은퇴 준비 전략을 알려주세요' },
+                        { icon: '💎', text: '목표 은퇴자금<br>설정하기', question: '적정 은퇴자금을 계산하는 방법을 알려주세요' },
+                        { icon: '⏰', text: '은퇴 시기별<br>준비 방법', question: '은퇴까지 남은 기간별 준비 방법을 알려주세요' }
+                    ],
+                    'tax': [
+                        { icon: '🧾', text: '연금저축<br>세제혜택', question: '연금저축의 세제혜택을 자세히 알려주세요' },
+                        { icon: '💳', text: 'IRP 세액공제<br>한도 확인', question: 'IRP 세액공제 한도와 혜택을 알려주세요' },
+                        { icon: '📋', text: '연말정산<br>신고 방법', question: '연금저축 연말정산 신고 방법을 알려주세요' },
+                        { icon: '⚖️', text: '일반형 vs 세액공제형<br>비교', question: '일반형과 세액공제형의 차이점을 알려주세요' }
+                    ],
+                    'process': [
+                        { icon: '📝', text: '연금 가입<br>절차 안내', question: '연금상품 가입 절차를 단계별로 알려주세요' },
+                        { icon: '📄', text: '필요 서류<br>확인하기', question: '연금 가입 시 필요한 서류를 알려주세요' },
+                        { icon: '🏪', text: '가입 장소<br>추천받기', question: '연금상품을 어디서 가입하는 것이 좋은지 알려주세요' },
+                        { icon: '🔄', text: '기존 연금<br>이전 방법', question: '다른 회사 연금을 이전하는 방법을 알려주세요' }
+                    ],
+                    'general': [
+                        { icon: '❓', text: '연금저축 vs IRP<br>차이점', question: '연금저축과 IRP의 차이점을 쉽게 설명해주세요' },
+                        { icon: '🔮', text: '연금 트렌드<br>최신 정보', question: '최신 연금 시장 트렌드를 알려주세요' },
+                        { icon: '⚠️', text: '연금 가입 시<br>주의사항', question: '연금 가입 시 주의해야 할 점들을 알려주세요' },
+                        { icon: '🎓', text: '연금 기초<br>용어 설명', question: '연금 관련 기본 용어들을 쉽게 설명해주세요' }
+                    ]
+                };
+                return questions[category] || [];
+            }
+
+            updateQuestionsByCategory(category) {
+                const questionsContainer = document.getElementById('categoryQuestions');
+                
+                if (!category) {
+                    // 기본 추천 질문들 표시
+                    questionsContainer.innerHTML = `
+                        <button class="quick-question-btn" data-question="내 상황에 맞는 연금 상품을 추천해주세요">
+                            <span class="question-icon">🎯</span>
+                            <span class="question-text">내 상황에 맞는<br>연금 상품 추천받기</span>
+                        </button>
+                        <button class="quick-question-btn" data-question="수수료가 가장 낮은 연금 상품 5개를 알려주세요">
+                            <span class="question-icon">💸</span>
+                            <span class="question-text">수수료 최저가<br>상품 찾아보기</span>
+                        </button>
+                        <button class="quick-question-btn" data-question="은퇴 후 월 300만원으로 생활하려면 얼마나 준비해야 하나요?">
+                            <span class="question-icon">🏠</span>
+                            <span class="question-text">은퇴 후 생활비<br>계산해보기</span>
+                        </button>
+                        <button class="quick-question-btn" data-question="연금저축과 IRP의 차이점을 쉽게 설명해주세요">
+                            <span class="question-icon">📚</span>
+                            <span class="question-text">연금 상품 종류<br>차이점 알아보기</span>
+                        </button>
+                    `;
+                    return;
+                }
+
+                const questions = this.getQuestionsByCategory(category);
+                questionsContainer.innerHTML = questions.map(q => `
+                    <button class="quick-question-btn" data-question="${q.question}">
+                        <span class="question-icon">${q.icon}</span>
+                        <span class="question-text">${q.text}</span>
+                    </button>
+                `).join('');
+            }
+
+            askQuestion(question) {
+                const chatInput = document.getElementById('chatInput');
+                chatInput.value = question;
+                this.sendMessage();
             }
 
             async startDiagnosis() {
@@ -711,6 +1053,25 @@ ${this.getPersonalizedAnalysis()}
                 
                 const icon = sender === 'user' ? '<i class="fas fa-user me-2"></i>' : '<i class="fas fa-robot me-2"></i>';
                 
+                // AI 메시지인 경우 후속 질문 버튼들 생성
+                let followUpButtons = '';
+                if (sender === 'ai' && !isError) {
+                    const followUpQuestions = this.generateFollowUpQuestions(message);
+                    if (followUpQuestions.length > 0) {
+                        followUpButtons = `
+                            <div class="follow-up-questions">
+                                <div class="follow-up-title">
+                                    <i class="fas fa-lightbulb"></i>
+                                    이런 것도 궁금하지 않으세요?
+                                </div>
+                                ${followUpQuestions.map(q => 
+                                    `<button class="follow-up-btn" data-question="${q}">${q}</button>`
+                                ).join('')}
+                            </div>
+                        `;
+                    }
+                }
+                
                 messageDiv.innerHTML = `
                     <div class="message-content">
                         ${sender === 'ai' ? icon : ''}
@@ -718,17 +1079,143 @@ ${this.getPersonalizedAnalysis()}
                         ${sender === 'user' ? icon : ''}
                     </div>
                     <div class="message-timestamp">${timestamp}</div>
+                    ${followUpButtons}
                 `;
                 
                 chatMessages.appendChild(messageDiv);
                 chatMessages.scrollTop = chatMessages.scrollHeight;
             }
 
+            // AI 응답에 따른 후속 질문 자동 생성
+            generateFollowUpQuestions(aiMessage) {
+                const message = aiMessage.toLowerCase();
+                const followUpQuestions = [];
+
+                // 키워드 기반 후속 질문 생성
+                if (message.includes('추천') || message.includes('상품')) {
+                    followUpQuestions.push('이 상품들의 수수료는 얼마인가요?');
+                    followUpQuestions.push('가입 방법을 알려주세요');
+                    followUpQuestions.push('다른 연령대 추천상품도 보고 싶어요');
+                }
+
+                if (message.includes('수수료') || message.includes('비용')) {
+                    followUpQuestions.push('수수료 외에 다른 비용도 있나요?');
+                    followUpQuestions.push('수수료를 줄이는 방법이 있나요?');
+                    followUpQuestions.push('이 회사들의 서비스 품질은 어때요?');
+                }
+
+                if (message.includes('은퇴') || message.includes('계획') || message.includes('준비')) {
+                    followUpQuestions.push('구체적인 투자 방법을 알려주세요');
+                    followUpQuestions.push('중간에 돈이 필요하면 어떻게 하나요?');
+                    followUpQuestions.push('인플레이션도 고려해야 하나요?');
+                }
+
+                if (message.includes('세제') || message.includes('세금') || message.includes('공제')) {
+                    followUpQuestions.push('연말정산 시 주의사항이 있나요?');
+                    followUpQuestions.push('세액공제 한도를 늘리는 방법은?');
+                    followUpQuestions.push('일반형과 세액공제형 중 뭐가 좋나요?');
+                }
+
+                if (message.includes('가입') || message.includes('신청')) {
+                    followUpQuestions.push('온라인으로도 가입할 수 있나요?');
+                    followUpQuestions.push('필요한 서류가 뭐가 있나요?');
+                    followUpQuestions.push('가입 후 변경할 수 있는 것들이 있나요?');
+                }
+
+                if (message.includes('차이') || message.includes('비교')) {
+                    followUpQuestions.push('내 상황에는 어느 것이 더 좋나요?');
+                    followUpQuestions.push('둘 다 가입해도 되나요?');
+                    followUpQuestions.push('나중에 바꿀 수 있나요?');
+                }
+
+                // 기본 후속 질문들 (항상 포함)
+                if (followUpQuestions.length === 0) {
+                    followUpQuestions.push('더 자세히 알려주세요');
+                    followUpQuestions.push('다른 방법도 있나요?');
+                    followUpQuestions.push('실제 사례를 들어주세요');
+                }
+
+                // 최대 3개까지만 표시
+                return followUpQuestions.slice(0, 3);
+            }
+
             formatMessage(message) {
-                return message
-                    .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
-                    .replace(/\*(.*?)\*/g, '<em>$1</em>')
-                    .replace(/\n/g, '<br>');
+                let formatted = message;
+                
+                // 테이블 마크다운 처리
+                formatted = this.parseMarkdownTable(formatted);
+                
+                // 헤딩 처리 (### ## #)
+                formatted = formatted.replace(/^### (.*$)/gm, '<h3 class="message-heading h6 mt-3 mb-2 text-primary">$1</h3>');
+                formatted = formatted.replace(/^## (.*$)/gm, '<h2 class="message-heading h5 mt-3 mb-2 text-primary">$1</h2>');
+                formatted = formatted.replace(/^# (.*$)/gm, '<h1 class="message-heading h4 mt-3 mb-2 text-primary">$1</h1>');
+                
+                // 리스트 처리 (- 또는 *)
+                formatted = formatted.replace(/^[\-\*] (.+$)/gm, '<li class="mb-1">$1</li>');
+                formatted = formatted.replace(/(<li.*<\/li>)/s, '<ul class="message-list mb-2">$1</ul>');
+                
+                // 번호 리스트 처리 (1. 2. 3.)
+                formatted = formatted.replace(/^\d+\. (.+$)/gm, '<li class="mb-1">$1</li>');
+                formatted = formatted.replace(/(<li.*<\/li>)/s, '<ol class="message-list mb-2">$1</ol>');
+                
+                // 코드 블록 처리
+                formatted = formatted.replace(/```(.*?)```/gs, '<div class="code-block bg-light p-2 rounded mb-2"><code>$1</code></div>');
+                formatted = formatted.replace(/`([^`]+)`/g, '<code class="bg-light px-1 rounded">$1</code>');
+                
+                // 링크 처리
+                formatted = formatted.replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2" target="_blank" class="text-primary">$1</a>');
+                
+                // 강조 처리
+                formatted = formatted.replace(/\*\*(.*?)\*\*/g, '<strong class="text-dark">$1</strong>');
+                formatted = formatted.replace(/\*(.*?)\*/g, '<em>$1</em>');
+                
+                // 줄바꿈 처리
+                formatted = formatted.replace(/\n/g, '<br>');
+                
+                return formatted;
+            }
+
+            parseMarkdownTable(text) {
+                const tableRegex = /^\|(.+)\|\s*\n\|[\s\-\|]+\|\s*\n((?:\|.+\|\s*\n?)*)/gm;
+                
+                return text.replace(tableRegex, (match, headerRow, bodyRows) => {
+                    // 헤더 파싱
+                    const headers = headerRow.split('|').map(h => h.trim()).filter(h => h);
+                    
+                    // 바디 행 파싱
+                    const rows = bodyRows.trim().split('\n').map(row => 
+                        row.split('|').map(cell => cell.trim()).filter(cell => cell)
+                    ).filter(row => row.length > 0);
+                    
+                    // HTML 테이블 생성
+                    let tableHtml = '<div class="table-responsive mt-2 mb-3">';
+                    tableHtml += '<table class="table table-sm table-striped">';
+                    
+                    // 헤더
+                    if (headers.length > 0) {
+                        tableHtml += '<thead class="table-light"><tr>';
+                        headers.forEach(header => {
+                            tableHtml += `<th class="fw-bold">${header}</th>`;
+                        });
+                        tableHtml += '</tr></thead>';
+                    }
+                    
+                    // 바디
+                    if (rows.length > 0) {
+                        tableHtml += '<tbody>';
+                        rows.forEach(row => {
+                            tableHtml += '<tr>';
+                            row.forEach(cell => {
+                                tableHtml += `<td>${cell}</td>`;
+                            });
+                            tableHtml += '</tr>';
+                        });
+                        tableHtml += '</tbody>';
+                    }
+                    
+                    tableHtml += '</table></div>';
+                    return tableHtml;
+                });
             }
 
             showTypingIndicator() {
